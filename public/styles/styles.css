@@ -20,11 +20,36 @@
   flex: 1;
   height: 200px;
   transition: .35s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.color-box h3 {
+  font-family: 'Sarnia', cursive;
+  font-size: 2rem;
+  opacity: 0;
+  transition: .45s ease;
+}
+
+.fa-unlock {
+  font-size: 2.5rem;
+  text-shadow: 0 0 8px rgba(0, 0, 0, 0.589);
+  transition: .35s ease;
+}
+
+i:hover {
+  transform: scale(1.1);
 }
 
 .color-box:hover {
   cursor: pointer;
   flex: 1.8;
+}
+
+.color-box:hover h3 {
+  opacity: 1;
 }
 
 .color1 {
