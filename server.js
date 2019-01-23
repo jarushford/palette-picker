@@ -51,15 +51,22 @@ app.get('/api/v1/projects/:id/palettes', (request, response) => {
   const palettes = app.locals.palettes
   const id = parseInt(request.params.id)
 
-  const currentPaletttes = palettes.filter(palette => {
+  const currentPalettes = palettes.filter(palette => {
     return palette.project_id === id
   })
-
-  response.status(200).json(currentPaletttes)
+  
+  response.status(200).json(currentPalettes)
 })
 
 app.get('/api/v1/projects/:id/palettes/:palette_id', (request, response) => {
-  // Get a specific palette when clicked on
+  const palettes = app.locals.palettes
+  const palette_id = parseInt(request.params.id)
+
+  const currentPalette = palettes.find(palette => {
+    return palette.id === palette_id
+  })
+
+  response.status(200).json(currentPalette)
 })
 
 app.post('/api/v1/projects/:id', (request, response) => {

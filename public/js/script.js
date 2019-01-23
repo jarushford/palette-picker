@@ -11,6 +11,9 @@ hexCodes.forEach(hex => {
   hex.addEventListener('click', copyColor)
 })
 
+const projectsContainer = document.querySelector('.projects-grid')
+projectsContainer.addEventListener('click', handlePaletteSelection)
+
 function generateHexCode() {
   const digitKey = {
     0: '0',
@@ -85,11 +88,10 @@ async function getProjects() {
 }
 
 async function getPalettes(project) {
-  const projectsContainer = document.querySelector('.projects-grid')
   const response = await fetch(`/api/v1/projects/${project.id}/palettes`)
   const result = await response.json()
   const html = `
-    <article class="project">
+    <article class="project" id="${project.id}">
       <h2 class="project-title">${project.name}</h2>
       <ul class="project-palettes">
         ${result.map(palette => {
@@ -103,7 +105,7 @@ async function getPalettes(project) {
 
 function buildPalette(palette) {
   return `
-    <li class="project-palette">
+    <li class="project-palette" id="${palette.id}">
       <h3 class="project-palette-name">${palette.name}</h3>
       <div class="project-palette-color" style="background:${palette.color1}"></div>
       <div class="project-palette-color" style="background:${palette.color2}"></div>
@@ -113,6 +115,23 @@ function buildPalette(palette) {
       <button class="delete-btn">X</button>
     </li>
   `
+}
+
+async function handlePaletteSelection(e) {
+  if (e.target.classList.contains('project-palette-name')) {
+    const paletteID = e.target.parentElement.id
+    const projectID = e.target.parentElement.parentElement.parentElement.id
+
+    const response = await fetch(`/api/v1/projects/${projectID}/palettes/${paletteID}`)
+    const result = await response.json()
+
+    const colorBoxes = document.querySelectorAll('.color-box')
+    colorBoxes.forEach((color, i) => {
+      color.lastElementChild.lastElementChild.innerText = result[`color${i+1}`]
+      color.style.background = result[`color${i+1}`]
+    })
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
 }
 
 getProjects()
