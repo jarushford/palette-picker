@@ -1,3 +1,121 @@
-h1 {
-  color: blue;
+.title {
+  margin: 30px auto;
+  text-align: center;
+  font-family: 'Sarina', cursive;
+  font-size: 3rem;
+  color: rgb(58, 58, 58);
+}
+
+.color-section {
+  width: 80%;
+  min-width: 600px;
+  max-width: 1000px;
+  display: flex;
+  margin: 0 auto;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px 2px rgba(0, 0, 0, .35);
+}
+
+.color-box {
+  flex: 1;
+  height: 200px;
+  transition: .35s ease;
+}
+
+.color-box:hover {
+  cursor: pointer;
+  flex: 1.8;
+}
+
+.color1 {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  background: blue;
+}
+
+.color2 { background: green }
+.color3 { background: purple }
+.color4 { background: orange }
+
+.color5 {
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  background: red;
+}
+
+.controls {
+  margin: 40px auto;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 160px;
+  align-items: center;
+  padding-bottom: 35px;
+  border-bottom: 3px solid rgba(0, 0, 0, .35);
+}
+
+.btn {
+  width: 200px;
+  height: 45px;
+  border-radius: 5px;
+  box-shadow: 0 2px 6px 1px rgba(0, 0, 0, .35),
+              inset 0 -2px 6px 1px rgba(0, 0, 0, .35);
+  font-family: 'Skranji', cursive;
+  font-size: 1.2rem;
+  border: none;
+  background: #EDEDED;
+  cursor: pointer;
+  outline: none;
+}
+
+.save-palette,
+.create-project {
+  background: rgba(16, 202, 112, 0.822);
+}
+
+select {
+  width: 150px;
+  height: 30px;
+  outline: none;
+  font-family: 'Skranji', cursive;
+  margin: auto 10px;
+}
+
+.palette-info {
+  margin: 15px auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+input {
+  height: 28px;
+  width: 200px;
+  margin: auto 10px;
+  padding-left: 6px;
+  padding-top: 3px;
+  outline: none;
+}
+
+.palette-name,
+.palette-name::placeholder,
+.project-name,
+.project-name::placeholder {
+  font-size: 1.1rem;
+  font-family: 'Skranji', cursive;
+}
+
+.create-project-section {
+  margin: 30px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80%;
+  padding-bottom: 35px;
+  border-bottom: 3px solid rgba(0, 0, 0, .35);
+}
+
+.projects-container {
+  min-height: 20vh;
 }
