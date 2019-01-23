@@ -1,6 +1,11 @@
 const generateBtn = document.querySelector('.generate-colors')
 generateBtn.addEventListener('click', fillAllColors)
 
+const lockIcons = document.querySelectorAll('i')
+lockIcons.forEach(icon => {
+  icon.addEventListener('click', toggleLock)
+})
+
 function generateHexCode() {
   const digitKey = {
     0: '0',
@@ -35,12 +40,21 @@ function fillAllColors() {
     if (!color.classList.contains('locked')) {
       const randomColor = generateHexCode()
       color.lastElementChild.lastElementChild.innerText = randomColor
-      console.log(color.style)
       color.style.background = `#${randomColor}`
-    } else {
-      // grab color for locked box and set
     }
   })
+}
+
+function toggleLock(e) {
+  if (e.target.parentElement.classList.contains('locked')) {
+    e.target.parentElement.classList.remove('locked')
+    e.target.classList.remove('fa-lock')
+    e.target.classList.add('fa-unlock')
+  } else {
+    e.target.parentElement.classList.add('locked')
+    e.target.classList.remove('fa-unlock')
+    e.target.classList.add('fa-lock')
+  }
 }
 
 
