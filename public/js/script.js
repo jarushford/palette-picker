@@ -76,4 +76,44 @@ function copyColor(e) {
   color.remove()
 }
 
+async function getProjects() {
+  const response = await fetch('/api/v1/projects')
+  const result = await response.json()
+  result.forEach(project => {
+    getPalettes(project)
+  })
+}
+
+async function getPalettes(project) {
+  const projectsContainer = document.querySelector('.projects-grid')
+  const response = await fetch(`/api/v1/projects/${project.id}/palettes`)
+  const result = await response.json()
+  const html = `
+    <article class="project">
+      <h2 class="project-title">${project.name}</h2>
+      <ul class="project-palettes">
+        ${result.map(palette => {
+          return buildPalette(palette)
+        })}
+      </ul>
+    </article>
+  `
+  projectsContainer.insertAdjacentHTML('beforeend', html)
+}
+
+function buildPalette(palette) {
+  return `
+    <li class="project-palette">
+      <h3 class="project-palette-name">${palette.name}</h3>
+      <div class="project-palette-color" style="background:${palette.color1}"></div>
+      <div class="project-palette-color" style="background:${palette.color2}"></div>
+      <div class="project-palette-color" style="background:${palette.color3}"></div>
+      <div class="project-palette-color" style="background:${palette.color4}"></div>
+      <div class="project-palette-color" style="background:${palette.color5}"></div>
+      <button class="delete-btn">X</button>
+    </li>
+  `
+}
+
+getProjects()
 fillAllColors()

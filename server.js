@@ -7,19 +7,58 @@ app.use(express.static('public'))
 app.locals.title = 'Palette Picker'
 app.set('port', process.env.PORT || 3000)
 
-app.use((request, response, next) => {
-  response.status(404).send('Page Not Found')
-})
+app.locals.projects = [
+  {
+    id: 1,
+    name: 'Project 1'
+  },
+  {
+    id: 2,
+    name: 'Project 2'
+  }
+]
+
+app.locals.palettes = [
+  {
+    id: 1,
+    name: 'Colors!',
+    project_id: 1,
+    color1: '#D5D9CF',
+    color2: '#B19B75',
+    color3: '#B14120',
+    color4: '#187685',
+    color5: '#7962B8'
+  },
+  {
+    id: 2,
+    name: 'Other Colors!',
+    project_id: 2,
+    color1: '#D5D9CF',
+    color2: '#B19B75',
+    color3: '#B14120',
+    color4: '#187685',
+    color5: '#7962B8'
+  }
+]
 
 app.get('/api/v1/projects', (request, response) => {
-  // Get all projects
+  const projects = app.locals.projects
+
+  response.status(200).json(projects)
 })
 
 app.get('/api/v1/projects/:id/palettes', (request, response) => {
-  // Get all palettes associated with a project
+  const palettes = app.locals.palettes
+  const id = parseInt(request.params.id)
+
+  const currentPaletttes = palettes.filter(palette => {
+    return palette.project_id === id
+  })
+
+  response.status(200).json(currentPaletttes)
 })
 
-app.get('/api/v1/projects/:id/palettes/:palette', (request, response) => {
+app.get('/api/v1/projects/:id/palettes/:palette_id', (request, response) => {
   // Get a specific palette when clicked on
 })
 
@@ -27,7 +66,7 @@ app.post('/api/v1/projects/:id', (request, response) => {
   // Post a new palette associated with a project
 })
 
-app.delete('/api/v1/projects/:id/palettes/:palette', (request, response) => {
+app.delete('/api/v1/projects/:id/palettes/:palette_id', (request, response) => {
   // Delete a palette from a project
 })
 
