@@ -27,8 +27,8 @@
 }
 
 .color-box h3 {
-  font-family: 'Sarnia', cursive;
-  font-size: 2rem;
+  font-family: 'Skranji', cursive;
+  font-size: 1.5rem;
   opacity: 0;
   transition: .45s ease;
 }
@@ -55,17 +55,11 @@ i:hover {
 .color1 {
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
-  background: blue;
 }
-
-.color2 { background: green }
-.color3 { background: purple }
-.color4 { background: orange }
 
 .color5 {
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
-  background: red;
 }
 
 .controls {
