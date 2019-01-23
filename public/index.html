@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Palette Picker</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="styles/reset.css">
+    <link rel="stylesheet" href="styles/styles.css">
+  </head>
+  <body>
+    <h1>Palette Picker</h1>
+    <section class="color-section">
+      <div class="color-box color1">Color 1</div>
+      <div class="color-box color2">Color 2</div>
+      <div class="color-box color3">Color 3</div>
+      <div class="color-box color4">Color 4</div>
+      <div class="color-box color5">Color 5</div>
+    </section>
+    <section class="controls">
+      <button class="generate-colors">Generate Colors</button>
+      <div class="palette-info">
+        <select class="select-project">
+          <option value="">Project...</option>
+        </select>
+        <input type="text" class="name-input" />
+      </div>
+      <button>Save Palette</button>
+    </section>
+    <section class="create-project">
+      <input type="text" class="project=name" />
+      <button class="create-project">Create Project</button>
+    </section>
+    <main class="projects-container"></main>
+  </body>
+  <script src="script.js" async defer></script>
+</html>
