@@ -1,3 +1,7 @@
+body {
+  background: linear-gradient(white, rgb(228, 242, 255));
+}
+
 .title {
   margin: 30px auto;
   text-align: center;
@@ -165,6 +169,7 @@ input {
   min-height: 20vh;
   width: 80%;
   margin: 0 auto 50px;
+  max-width: 1000px;
 }
 
 .projects-grid {
@@ -196,9 +201,11 @@ input {
 .project-palette-name {
   position: absolute;
   top: 8px;
-  padding: 5px 10px;
-  left: 75px;
-  border-radius: 3px;
+  padding: 5px 0;
+  left: 0px;
+  width: 300px;
+  line-height: 25px;
+  text-align: center;
   font-family: 'Skranji', cursive;
   font-size: 1.5rem;
   transition: .5s ease;
