@@ -6,6 +6,11 @@
   color: rgb(58, 58, 58);
 }
 
+.projects-title {
+  font-size: 2.2rem;
+  margin-bottom: 40px;
+}
+
 .color-section {
   width: 80%;
   min-width: 600px;
@@ -33,6 +38,11 @@
   transition: .45s ease;
   text-shadow: 0 0 8px rgba(0, 0, 0, 0.589);
   color: white;
+}
+
+.hex-code:hover {
+  transform: scale(1.02);
+  transition: .3s;
 }
 
 .hex-code:active {
@@ -78,7 +88,7 @@ i:hover {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 160px;
+  height: 180px;
   align-items: center;
   padding-bottom: 35px;
   border-bottom: 3px solid rgba(0, 0, 0, .35);
@@ -96,11 +106,17 @@ i:hover {
   background: #EDEDED;
   cursor: pointer;
   outline: none;
+  transition: .1s;
+}
+
+.btn:active {
+  box-shadow: 0 2px 2px 1px rgba(0, 0, 0, .35),
+              inset 0 -2px 12px 1px rgba(0, 0, 0, .35);
 }
 
 .save-palette,
 .create-project {
-  background: rgba(16, 202, 112, 0.822);
+  background: #84B13D;
 }
 
 select {
@@ -112,7 +128,7 @@ select {
 }
 
 .palette-info {
-  margin: 15px auto;
+  margin: 35px auto 15px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -147,4 +163,100 @@ input {
 
 .projects-container {
   min-height: 20vh;
+  width: 80%;
+  margin: 0 auto 50px;
 }
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.project-title {
+  width: 250px;
+  text-align: center;
+  height: 50px;
+  background: #7265B0;
+  font-family: 'Sarina', cursive;
+  font-size: 1.5rem;
+  line-height: 50px;
+  margin: 0 auto;
+  border-radius: 5px;
+}
+
+.project-palette {
+  display: flex;
+  height: 50px;
+  position: relative;
+  width: 300px;
+  margin: 30px auto;
+  cursor: pointer;
+}
+
+.project-palette-name {
+  position: absolute;
+  top: 8px;
+  padding: 5px 10px;
+  left: 75px;
+  border-radius: 3px;
+  font-family: 'Skranji', cursive;
+  font-size: 1.5rem;
+  transition: .5s ease;
+}
+
+.project-palette-color {
+  flex: 1;
+  opacity: 0.2;
+  transition: .5s ease;
+  z-index: -1;
+}
+
+.project-palette:hover .project-palette-color {
+  opacity: 1;
+}
+
+.project-palette:hover .project-palette-name {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.delete-btn {
+  position: absolute;
+  height: 30px;
+  width: 30px;
+  border-radius: 40%;
+  right: -15px;
+  top: -10px;
+  cursor: pointer;
+  font-family: 'Skranji', cursive;
+  font-size: 1rem;
+  color: darkred;
+  border: none;
+  opacity: 0;
+  outline: none;
+  transition: .5s ease;
+  box-shadow: 0 2px 6px 1px rgba(0, 0, 0, .25),
+              inset 0 -2px 2px 1px rgba(0, 0, 0, .35);
+}
+
+.delete-btn:hover {
+  animation: shake .5s ease infinite;
+}
+
+.project-palette:hover .delete-btn {
+  opacity: 1;
+}
+
+@keyframes shake {
+  0%, 50%, 100% {
+    transform: rotate(0deg)
+  }
+  25%, 75% {
+    transform: rotate(5deg)
+  }
+}
+
+.p-color1 { background: #D5D9CF }
+.p-color2 { background: #B19B75 }
+.p-color3 { background: #B14120 }
+.p-color4 { background: #187685 }
+.p-color5 { background: #7962B8 }
