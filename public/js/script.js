@@ -20,6 +20,17 @@ createProjectBtn.addEventListener('click', addProject)
 const savePaletteBtn = document.querySelector('.save-palette')
 savePaletteBtn.addEventListener('click', addPalette)
 
+const paletteInput = document.querySelector('.palette-name')
+const projectInput = document.querySelector('.project-name')
+
+paletteInput.addEventListener('keyup', () => clearError('palette'))
+projectInput.addEventListener('keyup', () => clearError('project'))
+
+function clearError(type) {
+  const error = document.querySelector(`.${type}-error`)
+  error.classList.remove('error-show')
+}
+
 function generateHexCode() {
   const digitKey = {
     0: '0',
@@ -108,9 +119,10 @@ async function getPalettes(project) {
     <article class="project" id="${project.id}">
       <h2 class="project-title">${project.name}</h2>
       <ul class="project-palettes">
-        ${result.map(palette => {
-          return buildPalette(palette)
-        })}
+        ${result.reduce((acc, palette) => {
+          acc += buildPalette(palette)
+          return acc
+        }, '')}
       </ul>
     </article>
   `
@@ -175,7 +187,8 @@ async function addProject() {
     addOption(result)
     nameInput.value = ''
   } else {
-    console.log('Must have a name!')
+    const projectError = document.querySelector('.project-error')
+    projectError.classList.add('error-show')
   }
 }
 
@@ -195,7 +208,8 @@ async function addPalette(e) {
   const nameInput = document.querySelector('.palette-name')
   const selectInput = document.querySelector('.select-project')
   if (!nameInput.value || !selectInput.value) {
-    console.log('No!')
+    const paletteError = document.querySelector('.palette-error')
+    paletteError.classList.add('error-show')
   } else {
     const newPalette = buildNewPalette(nameInput.value, parseInt(selectInput.value))
     const response = await fetch(`/api/v1/projects/${selectInput.value}`, {

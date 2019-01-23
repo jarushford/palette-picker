@@ -92,9 +92,9 @@ i:hover {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 180px;
+  height: 200px;
   align-items: center;
-  padding-bottom: 35px;
+  padding-bottom: 20px;
   border-bottom: 3px solid rgba(0, 0, 0, .35);
 }
 
@@ -161,7 +161,7 @@ input {
   justify-content: center;
   align-items: center;
   width: 80%;
-  padding-bottom: 35px;
+  padding-bottom: 50px;
   border-bottom: 3px solid rgba(0, 0, 0, .35);
 }
 
@@ -262,8 +262,20 @@ input {
   }
 }
 
-.p-color1 { background: #D5D9CF }
-.p-color2 { background: #B19B75 }
-.p-color3 { background: #B14120 }
-.p-color4 { background: #187685 }
-.p-color5 { background: #7962B8 }
+.error {
+  font-family: 'Skranji', cursive;
+  font-size: 1rem;
+  color: darkred;
+  margin: 10px;
+  transition: .2s ease;
+  opacity: 0;
+}
+
+.project-error {
+  position: absolute;
+  bottom: 20px;
+}
+
+.error-show {
+  opacity: 1;
+}
