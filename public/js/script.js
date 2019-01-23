@@ -14,6 +14,12 @@ hexCodes.forEach(hex => {
 const projectsContainer = document.querySelector('.projects-grid')
 projectsContainer.addEventListener('click', handlePaletteSelection)
 
+const createProjectBtn = document.querySelector('.create-project')
+createProjectBtn.addEventListener('click', addProject)
+
+const savePaletteBtn = document.querySelector('.save-palette')
+savePaletteBtn.addEventListener('click', addPalette)
+
 function generateHexCode() {
   const digitKey = {
     0: '0',
@@ -84,7 +90,15 @@ async function getProjects() {
   const result = await response.json()
   result.forEach(project => {
     getPalettes(project)
+    addOption(project)
   })
+}
+
+function addOption(project) {
+  const selection = document.querySelector('.select-project')
+  selection.insertAdjacentHTML('beforeend', `
+    <option value=${project.id}>${project.name}</option>
+  `)
 }
 
 async function getPalettes(project) {
@@ -107,11 +121,11 @@ function buildPalette(palette) {
   return `
     <li class="project-palette" id="${palette.id}">
       <h3 class="project-palette-name">${palette.name}</h3>
-      <div class="project-palette-color" style="background:${palette.color1}"></div>
-      <div class="project-palette-color" style="background:${palette.color2}"></div>
-      <div class="project-palette-color" style="background:${palette.color3}"></div>
-      <div class="project-palette-color" style="background:${palette.color4}"></div>
-      <div class="project-palette-color" style="background:${palette.color5}"></div>
+      <div class="project-palette-color" style="background:#${palette.color1}"></div>
+      <div class="project-palette-color" style="background:#${palette.color2}"></div>
+      <div class="project-palette-color" style="background:#${palette.color3}"></div>
+      <div class="project-palette-color" style="background:#${palette.color4}"></div>
+      <div class="project-palette-color" style="background:#${palette.color5}"></div>
       <button class="delete-btn">X</button>
     </li>
   `
@@ -128,10 +142,68 @@ async function handlePaletteSelection(e) {
     const colorBoxes = document.querySelectorAll('.color-box')
     colorBoxes.forEach((color, i) => {
       color.lastElementChild.lastElementChild.innerText = result[`color${i+1}`]
-      color.style.background = result[`color${i+1}`]
+      color.style.background = '#' + result[`color${i+1}`]
     })
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
+}
+
+async function addProject() {
+  const nameInput = document.querySelector('.project-name')
+  const isRepeat = await checkProjectName(nameInput.value)
+  if (nameInput.value && !isRepeat) {
+    const response = await fetch('/api/v1/projects', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ project_name: nameInput.value })
+    })
+    const result = await response.json()
+    getPalettes(result)
+    addOption(result)
+    nameInput.value = ''
+  } else {
+    console.log('Must have a name!')
+  }
+}
+
+async function checkProjectName(name) {
+  const response = await fetch('/api/v1/projects')
+  const result = await response.json()
+  const repeat = result.find(project => {
+    return project.name === name
+  })
+  if (repeat) {
+    return true
+  }
+  return false
+}
+
+async function addPalette(e) {
+  const nameInput = document.querySelector('.palette-name')
+  const selectInput = document.querySelector('.select-project')
+  if (!nameInput.value || !selectInput.value) {
+    console.log('No!')
+  } else {
+    const response = await fetch(`/api/v1/projects/${selectInput.value}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ palette: buildNewPalette(nameInput.value, parseInt(selectInput.value)) })
+    })
+    const result = await response.json()
+    nameInput.value = ''
+    const newPalette = buildPalette(result)
+    const currentProject = document.getElementById(selectInput.value)
+    currentProject.lastElementChild.insertAdjacentHTML('beforeend', newPalette)
+  } 
+}
+
+function buildNewPalette(name, project_id) {
+  const newPalette = { id: Date.now(), name, project_id }
+  const colorBoxes = document.querySelectorAll('.color-box')
+  colorBoxes.forEach((color, i) => {
+    newPalette[`color${i+1}`] = color.style.backgroundColor
+  })
+  return newPalette
 }
 
 getProjects()
