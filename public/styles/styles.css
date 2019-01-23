@@ -26,11 +26,19 @@
   justify-content: space-evenly;
 }
 
-.color-box h3 {
+.hex-code {
   font-family: 'Skranji', cursive;
   font-size: 1.5rem;
   opacity: 0;
   transition: .45s ease;
+  text-shadow: 0 0 8px rgba(0, 0, 0, 0.589);
+  color: white;
+}
+
+.hex-code:active {
+  transform: scale(1.05);
+  transition: .1s;
+  color: rgb(87, 236, 87);
 }
 
 .fa-unlock,
@@ -38,6 +46,7 @@
   font-size: 2.5rem;
   text-shadow: 0 0 8px rgba(0, 0, 0, 0.589);
   transition: .35s ease;
+  color: white;
 }
 
 i:hover {

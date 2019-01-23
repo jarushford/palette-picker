@@ -6,6 +6,11 @@ lockIcons.forEach(icon => {
   icon.addEventListener('click', toggleLock)
 })
 
+const hexCodes = document.querySelectorAll('.hex-code')
+hexCodes.forEach(hex => {
+  hex.addEventListener('click', copyColor)
+})
+
 function generateHexCode() {
   const digitKey = {
     0: '0',
@@ -18,12 +23,12 @@ function generateHexCode() {
     7: '7',
     8: '8',
     9: '9',
-    10: 'a',
-    11: 'b',
-    12: 'c',
-    13: 'd',
-    14: 'e',
-    15: 'f'
+    10: 'A',
+    11: 'B',
+    12: 'C',
+    13: 'D',
+    14: 'E',
+    15: 'F'
   }
 
   let color = ''
@@ -57,6 +62,18 @@ function toggleLock(e) {
   }
 }
 
+function copyColor(e) {
+  const tempArea = document.createElement('textarea')
+  const tempText = document.createTextNode(`#${e.target.innerText}`)
+  const title = document.querySelector('.title')
 
+  tempArea.appendChild(tempText)
+  document.body.insertBefore(tempArea, title)
+
+  const color = document.querySelector('textarea')
+  color.select()
+  document.execCommand('copy')
+  color.remove()
+}
 
 fillAllColors()
