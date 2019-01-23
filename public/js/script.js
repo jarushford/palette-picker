@@ -184,16 +184,17 @@ async function addPalette(e) {
   if (!nameInput.value || !selectInput.value) {
     console.log('No!')
   } else {
+    const newPalette = buildNewPalette(nameInput.value, parseInt(selectInput.value))
     const response = await fetch(`/api/v1/projects/${selectInput.value}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ palette: buildNewPalette(nameInput.value, parseInt(selectInput.value)) })
+      body: JSON.stringify({ palette: newPalette })
     })
     const result = await response.json()
     nameInput.value = ''
-    const newPalette = buildPalette(result)
+    const newDOMPalette = buildPalette(result)
     const currentProject = document.getElementById(selectInput.value)
-    currentProject.lastElementChild.insertAdjacentHTML('beforeend', newPalette)
+    currentProject.lastElementChild.insertAdjacentHTML('beforeend', newDOMPalette)
   } 
 }
 
@@ -201,9 +202,60 @@ function buildNewPalette(name, project_id) {
   const newPalette = { id: Date.now(), name, project_id }
   const colorBoxes = document.querySelectorAll('.color-box')
   colorBoxes.forEach((color, i) => {
-    newPalette[`color${i+1}`] = color.style.backgroundColor
+    newPalette[`color${i+1}`] = convertRGBtoHex(color.style.backgroundColor)
   })
   return newPalette
+}
+
+function convertRGBtoHex(color) {
+  const regex = /\d+/g
+  color = color.match(regex)
+  let hex = ''
+  color.forEach(code => {
+    code = code.length < 2 ? '0' + code : code
+    hex += convertCode(code)
+  })
+  return hex
+}
+
+function convertCode(code) {
+  const digitKey = {
+    0: '0',
+    1: '1',
+    2: '2',
+    3: '3',
+    4: '4',
+    5: '5',
+    6: '6',
+    7: '7',
+    8: '8',
+    9: '9',
+    10: 'A',
+    11: 'B',
+    12: 'C',
+    13: 'D',
+    14: 'E',
+    15: 'F'
+  }
+  let hexCodeValue = ''
+  let rawConversion1
+  let rawConversion2 
+
+  if (code === '255') {
+    rawConversion1 = 15
+  } else {
+    rawConversion1 = Math.floor(code / 255 * 16)
+  }
+  hexCodeValue += digitKey[rawConversion1]
+
+  if (parseInt(code) === 0) {
+    rawConversion2 = 0
+  } else {
+    rawConversion2 = Math.floor((255 % code) / 255 * 16)
+  }
+  hexCodeValue += digitKey[rawConversion2]
+  
+  return hexCodeValue
 }
 
 getProjects()

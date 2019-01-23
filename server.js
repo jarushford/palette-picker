@@ -67,7 +67,7 @@ app.get('/api/v1/projects/:id/palettes', (request, response) => {
 
 app.get('/api/v1/projects/:id/palettes/:palette_id', (request, response) => {
   const palettes = app.locals.palettes
-  const palette_id = parseInt(request.params.id)
+  const palette_id = parseInt(request.params.palette_id)
 
   const currentPalette = palettes.find(palette => {
     return palette.id === palette_id
