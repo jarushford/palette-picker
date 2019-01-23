@@ -84,11 +84,14 @@ app.post('/api/v1/projects/:id', (request, response) => {
 })
 
 app.delete('/api/v1/projects/:id/palettes/:palette_id', (request, response) => {
-  // Delete a palette from a project
+  const id = request.params.palette_id
+  const newPalettes = app.locals.filter(palette => {
+    return palette.id !== id
+  })
+
+  app.locals.palettes = newPalettes
+  response.status(200).json('Success')
 })
-
-
-// (Delete a project?)
 
 app.listen(app.get('port'), () => {
   console.log(`${app.locals.title} is running on ${app.get('port')}.`)

@@ -145,6 +145,19 @@ async function handlePaletteSelection(e) {
       color.style.background = '#' + result[`color${i+1}`]
     })
     window.scrollTo({ top: 0, behavior: 'smooth' })
+  } else if (e.target.classList.contains('delete-btn')) {
+    handleDelete(e)
+  }
+}
+
+async function handleDelete(e) {
+  const paletteID = e.target.parentElement.id
+  const projectID = e.target.parentElement.parentElement.parentElement.id
+
+  const response = await fetch(`/api/v1/projects/${projectID}/palettes/${paletteID}`)
+
+  if (response.ok) {
+    e.target.parentElement.remove()
   }
 }
 
@@ -254,7 +267,7 @@ function convertCode(code) {
     rawConversion2 = Math.floor((255 % code) / 255 * 16)
   }
   hexCodeValue += digitKey[rawConversion2]
-  
+
   return hexCodeValue
 }
 
