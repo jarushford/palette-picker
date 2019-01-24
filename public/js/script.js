@@ -1,30 +1,31 @@
 const generateBtn = document.querySelector('.generate-colors')
-generateBtn.addEventListener('click', fillAllColors)
-
 const lockIcons = document.querySelectorAll('i')
+const hexCodes = document.querySelectorAll('.hex-code')
+const projectsContainer = document.querySelector('.projects-grid')
+const createProjectBtn = document.querySelector('.create-project')
+const savePaletteBtn = document.querySelector('.save-palette')
+const paletteInput = document.querySelector('.palette-name')
+const projectInput = document.querySelector('.project-name')
+
+generateBtn.addEventListener('click', fillAllColors)
+projectsContainer.addEventListener('click', handlePaletteSelection)
+savePaletteBtn.addEventListener('click', addPalette)
+createProjectBtn.addEventListener('click', addProject)
+paletteInput.addEventListener('keyup', () => clearError('palette'))
+projectInput.addEventListener('keyup', () => clearError('project'))
+
 lockIcons.forEach(icon => {
   icon.addEventListener('click', toggleLock)
 })
 
-const hexCodes = document.querySelectorAll('.hex-code')
 hexCodes.forEach(hex => {
   hex.addEventListener('click', copyColor)
 })
 
-const projectsContainer = document.querySelector('.projects-grid')
-projectsContainer.addEventListener('click', handlePaletteSelection)
 
-const createProjectBtn = document.querySelector('.create-project')
-createProjectBtn.addEventListener('click', addProject)
+getProjects()
+fillAllColors()
 
-const savePaletteBtn = document.querySelector('.save-palette')
-savePaletteBtn.addEventListener('click', addPalette)
-
-const paletteInput = document.querySelector('.palette-name')
-const projectInput = document.querySelector('.project-name')
-
-paletteInput.addEventListener('keyup', () => clearError('palette'))
-projectInput.addEventListener('keyup', () => clearError('project'))
 
 function clearError(type) {
   const error = document.querySelector(`.${type}-error`)
@@ -229,61 +230,7 @@ function buildNewPalette(name, project_id) {
   const newPalette = { id: Date.now(), name, project_id }
   const colorBoxes = document.querySelectorAll('.color-box')
   colorBoxes.forEach((color, i) => {
-    newPalette[`color${i+1}`] = convertRGBtoHex(color.style.backgroundColor)
+    newPalette[`color${i+1}`] = color.lastElementChild.innerText.substring(1)
   })
   return newPalette
 }
-
-function convertRGBtoHex(color) {
-  const regex = /\d+/g
-  color = color.match(regex)
-  let hex = ''
-  color.forEach(code => {
-    code = code.length < 2 ? '0' + code : code
-    hex += convertCode(code)
-  })
-  return hex
-}
-
-function convertCode(code) {
-  const digitKey = {
-    0: '0',
-    1: '1',
-    2: '2',
-    3: '3',
-    4: '4',
-    5: '5',
-    6: '6',
-    7: '7',
-    8: '8',
-    9: '9',
-    10: 'A',
-    11: 'B',
-    12: 'C',
-    13: 'D',
-    14: 'E',
-    15: 'F'
-  }
-  let hexCodeValue = ''
-  let rawConversion1
-  let rawConversion2 
-
-  if (code === '255') {
-    rawConversion1 = 15
-  } else {
-    rawConversion1 = Math.floor(code / 255 * 16)
-  }
-  hexCodeValue += digitKey[rawConversion1]
-
-  if (parseInt(code) === 0) {
-    rawConversion2 = 0
-  } else {
-    rawConversion2 = Math.floor((255 % code) / 255 * 16)
-  }
-  hexCodeValue += digitKey[rawConversion2]
-
-  return hexCodeValue
-}
-
-getProjects()
-fillAllColors()
