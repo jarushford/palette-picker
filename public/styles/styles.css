@@ -125,9 +125,10 @@ i:hover {
 
 select {
   width: 150px;
-  height: 30px;
+  height: 36px;
   outline: none;
   font-family: 'Skranji', cursive;
+  font-size: .8rem;
   margin: auto 10px;
 }
 
@@ -162,6 +163,7 @@ input {
   align-items: center;
   width: 80%;
   padding-bottom: 50px;
+  position: relative;
   border-bottom: 3px solid rgba(0, 0, 0, .35);
 }
 
@@ -192,6 +194,7 @@ input {
   line-height: 50px;
   margin: 0 auto;
   border-radius: 5px;
+  cursor: default;
 }
 
 .project-palette {
@@ -254,8 +257,7 @@ input {
   right: 45px;
 }
 
-.project-title:hover ~ .project-delete,
-.project-delete:hover {
+.project:hover  .project-delete {
   opacity: 1;
 }
 
@@ -287,9 +289,53 @@ input {
 
 .project-error {
   position: absolute;
-  bottom: 20px;
+  bottom: 10px;
 }
 
 .error-show {
   opacity: 1;
+}
+
+@media screen and (max-width: 800px) {
+  .color-section {
+    flex-direction: column;
+    height: 500px;
+    min-width: 350px;
+  }
+
+  .color1 {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 0px;
+    border-top-right-radius: 10px;
+  }
+
+  .color5 {
+    border-bottom-left-radius: 10px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 10px;
+  }
+
+  .controls {
+    height: 300px;
+  }
+
+  .palette-info {
+    flex-direction: column;
+    height: 100px;
+  }
+
+  .create-project-section {
+    flex-direction: column;
+    height: 100px;
+  }
+
+  .projects-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .project-delete {
+    right: 20px;
+  }
 }

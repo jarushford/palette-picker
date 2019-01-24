@@ -13,19 +13,11 @@ savePaletteBtn.addEventListener('click', addPalette)
 createProjectBtn.addEventListener('click', addProject)
 paletteInput.addEventListener('keyup', () => clearError('palette'))
 projectInput.addEventListener('keyup', () => clearError('project'))
-
-lockIcons.forEach(icon => {
-  icon.addEventListener('click', toggleLock)
-})
-
-hexCodes.forEach(hex => {
-  hex.addEventListener('click', copyColor)
-})
-
+lockIcons.forEach(icon => icon.addEventListener('click', toggleLock))
+hexCodes.forEach(hex => hex.addEventListener('click', copyColor))
 
 getProjects()
 fillAllColors()
-
 
 function clearError(type) {
   const error = document.querySelector(`.${type}-error`)
@@ -34,22 +26,9 @@ function clearError(type) {
 
 function generateHexCode() {
   const digitKey = {
-    0: '0',
-    1: '1',
-    2: '2',
-    3: '3',
-    4: '4',
-    5: '5',
-    6: '6',
-    7: '7',
-    8: '8',
-    9: '9',
-    10: 'A',
-    11: 'B',
-    12: 'C',
-    13: 'D',
-    14: 'E',
-    15: 'F'
+    0: '0', 1: '1', 2: '2', 3: '3', 4: '4', 5: '5',
+    6: '6', 7: '7', 8: '8', 9: '9', 10: 'A',
+    11: 'B', 12: 'C', 13: 'D', 14: 'E', 15: 'F'
   }
 
   let color = ''
@@ -57,6 +36,7 @@ function generateHexCode() {
     let randNum = Math.floor(Math.random() * 16)
     color += digitKey[randNum]
   }
+  
   return color
 }
 
@@ -97,6 +77,42 @@ function copyColor(e) {
   color.remove()
 }
 
+function addOption(project) {
+  const selection = document.querySelector('.select-project')
+  selection.insertAdjacentHTML('beforeend', `
+    <option value=${project.id}>${project.name}</option>
+  `)
+}
+
+function buildPalette(palette) {
+  return `
+    <li class="project-palette" data-id="${palette.id}">
+      <h3 class="project-palette-name">${palette.name}</h3>
+      <div class="project-palette-color" style="background:#${palette.color1}"></div>
+      <div class="project-palette-color" style="background:#${palette.color2}"></div>
+      <div class="project-palette-color" style="background:#${palette.color3}"></div>
+      <div class="project-palette-color" style="background:#${palette.color4}"></div>
+      <div class="project-palette-color" style="background:#${palette.color5}"></div>
+      <button class="delete-btn">X</button>
+    </li>
+  `
+}
+
+function buildNewPalette(name, project_id) {
+  const newPalette = { name, project_id }
+  const colorBoxes = document.querySelectorAll('.color-box')
+  colorBoxes.forEach((color, i) => {
+    newPalette[`color${i+1}`] = color.lastElementChild.innerText.substring(1)
+  })
+  return newPalette
+}
+
+
+  /////////////////
+ /// API CALLS ///
+/////////////////
+
+
 async function getProjects() {
   const response = await fetch('/api/v1/projects')
   const result = await response.json()
@@ -104,13 +120,6 @@ async function getProjects() {
     getPalettes(project)
     addOption(project)
   })
-}
-
-function addOption(project) {
-  const selection = document.querySelector('.select-project')
-  selection.insertAdjacentHTML('beforeend', `
-    <option value=${project.id}>${project.name}</option>
-  `)
 }
 
 async function getPalettes(project) {
@@ -129,20 +138,6 @@ async function getPalettes(project) {
     </article>
   `
   projectsContainer.insertAdjacentHTML('beforeend', html)
-}
-
-function buildPalette(palette) {
-  return `
-    <li class="project-palette" data-id="${palette.id}">
-      <h3 class="project-palette-name">${palette.name}</h3>
-      <div class="project-palette-color" style="background:#${palette.color1}"></div>
-      <div class="project-palette-color" style="background:#${palette.color2}"></div>
-      <div class="project-palette-color" style="background:#${palette.color3}"></div>
-      <div class="project-palette-color" style="background:#${palette.color4}"></div>
-      <div class="project-palette-color" style="background:#${palette.color5}"></div>
-      <button class="delete-btn">X</button>
-    </li>
-  `
 }
 
 async function handlePaletteSelection(e) {
@@ -243,13 +238,4 @@ async function addPalette(e) {
     const currentProject = document.querySelector(`[data-id="${selectInput.value}"]`)
     currentProject.lastElementChild.insertAdjacentHTML('beforeend', newDOMPalette)
   } 
-}
-
-function buildNewPalette(name, project_id) {
-  const newPalette = { name, project_id }
-  const colorBoxes = document.querySelectorAll('.color-box')
-  colorBoxes.forEach((color, i) => {
-    newPalette[`color${i+1}`] = color.lastElementChild.innerText.substring(1)
-  })
-  return newPalette
 }
