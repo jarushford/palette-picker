@@ -117,7 +117,7 @@ async function getPalettes(project) {
   const response = await fetch(`/api/v1/projects/${project.id}/palettes`)
   const result = await response.json()
   const html = `
-    <article class="project" id="${project.id}">
+    <article class="project" data-id="${project.id}">
       <h2 class="project-title">${project.name}</h2>
       <ul class="project-palettes">
         ${result.reduce((acc, palette) => {
@@ -132,7 +132,7 @@ async function getPalettes(project) {
 
 function buildPalette(palette) {
   return `
-    <li class="project-palette" id="${palette.id}">
+    <li class="project-palette" data-id="${palette.id}">
       <h3 class="project-palette-name">${palette.name}</h3>
       <div class="project-palette-color" style="background:#${palette.color1}"></div>
       <div class="project-palette-color" style="background:#${palette.color2}"></div>
@@ -146,8 +146,8 @@ function buildPalette(palette) {
 
 async function handlePaletteSelection(e) {
   if (e.target.classList.contains('project-palette-name')) {
-    const paletteID = e.target.parentElement.id
-    const projectID = e.target.parentElement.parentElement.parentElement.id
+    const paletteID = e.target.parentElement.getAttribute('data-id')
+    const projectID = e.target.parentElement.parentElement.parentElement.getAttribute('data-id')
 
     const response = await fetch(`/api/v1/projects/${projectID}/palettes/${paletteID}`)
     const result = await response.json()
@@ -165,7 +165,7 @@ async function handlePaletteSelection(e) {
 
 async function handleDelete(e) {
   const paletteID = e.target.parentElement.id
-  const projectID = e.target.parentElement.parentElement.parentElement.id
+  const projectID = e.target.parentElement.parentElement.parentElement.getAttribute('data-id')
 
   const response = await fetch(`/api/v1/projects/${projectID}/palettes/${paletteID}`)
 
@@ -221,7 +221,7 @@ async function addPalette(e) {
     const result = await response.json()
     nameInput.value = ''
     const newDOMPalette = buildPalette(result)
-    const currentProject = document.getElementById(selectInput.value)
+    const currentProject = document.querySelector(`[data-id="${selectInput.value}"]`)
     currentProject.lastElementChild.insertAdjacentHTML('beforeend', newDOMPalette)
   } 
 }

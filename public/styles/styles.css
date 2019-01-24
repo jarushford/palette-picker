@@ -168,13 +168,17 @@ input {
 .projects-container {
   min-height: 20vh;
   width: 80%;
-  margin: 0 auto 50px;
+  margin: 0 auto 80px;
   max-width: 1000px;
 }
 
 .projects-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
+}
+
+.project {
+  margin-bottom: 20px;
 }
 
 .project-title {
