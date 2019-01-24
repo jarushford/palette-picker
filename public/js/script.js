@@ -118,6 +118,7 @@ async function getPalettes(project) {
   const result = await response.json()
   const html = `
     <article class="project" data-id="${project.id}">
+      <button class="delete-btn project-delete">X</button>
       <h2 class="project-title">${project.name}</h2>
       <ul class="project-palettes">
         ${result.reduce((acc, palette) => {
@@ -158,16 +159,34 @@ async function handlePaletteSelection(e) {
       color.style.background = '#' + result[`color${i+1}`]
     })
     window.scrollTo({ top: 0, behavior: 'smooth' })
+  } else if (e.target.classList.contains('project-delete')) {
+    handleProjectDelete(e)
   } else if (e.target.classList.contains('delete-btn')) {
-    handleDelete(e)
+    handlePaletteDelete(e)
   }
 }
 
-async function handleDelete(e) {
-  const paletteID = e.target.parentElement.id
+async function handlePaletteDelete(e) {
+  const paletteID = e.target.parentElement.getAttribute('data-id')
   const projectID = e.target.parentElement.parentElement.parentElement.getAttribute('data-id')
 
-  const response = await fetch(`/api/v1/projects/${projectID}/palettes/${paletteID}`)
+  const response = await fetch(`/api/v1/projects/${projectID}/palettes/${paletteID}`, {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' }
+  })
+
+  if (response.ok) {
+    e.target.parentElement.remove()
+  }
+}
+
+async function handleProjectDelete(e) {
+  const projectID = e.target.parentElement.getAttribute('data-id')
+
+  const response = await fetch(`/api/v1/projects/${projectID}`, {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' }
+  })
 
   if (response.ok) {
     e.target.parentElement.remove()
@@ -181,7 +200,7 @@ async function addProject() {
     const response = await fetch('/api/v1/projects', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ project_name: nameInput.value })
+      body: JSON.stringify({ name: nameInput.value })
     })
     const result = await response.json()
     getPalettes(result)
@@ -216,7 +235,7 @@ async function addPalette(e) {
     const response = await fetch(`/api/v1/projects/${selectInput.value}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ palette: newPalette })
+      body: JSON.stringify(newPalette)
     })
     const result = await response.json()
     nameInput.value = ''
@@ -227,7 +246,7 @@ async function addPalette(e) {
 }
 
 function buildNewPalette(name, project_id) {
-  const newPalette = { id: Date.now(), name, project_id }
+  const newPalette = { name, project_id }
   const colorBoxes = document.querySelectorAll('.color-box')
   colorBoxes.forEach((color, i) => {
     newPalette[`color${i+1}`] = color.lastElementChild.innerText.substring(1)

@@ -1,3 +1,6 @@
+const environment = process.env.NODE_ENV || 'development'
+const configuration = require('./knexfile')[environment]
+const database = require('knex')(configuration)
 const express = require('express')
 const bodyParser = require('body-parser')
 const app = express()
@@ -7,90 +10,94 @@ app.use(express.static('public'))
 app.locals.title = 'Palette Picker'
 app.set('port', process.env.PORT || 3000)
 
-app.locals.projects = [
-  {
-    id: 1,
-    name: 'Project 1'
-  },
-  {
-    id: 2,
-    name: 'Project 2'
-  }
-]
-
-app.locals.palettes = [
-  {
-    id: 1,
-    name: 'Colors!',
-    project_id: 1,
-    color1: 'D5D9CF',
-    color2: 'B19B75',
-    color3: 'B14120',
-    color4: '187685',
-    color5: '7962B8'
-  },
-  {
-    id: 2,
-    name: 'Other Colors!',
-    project_id: 2,
-    color1: 'D5D9CF',
-    color2: 'B19B75',
-    color3: 'B14120',
-    color4: '187685',
-    color5: '7962B8'
-  }
-]
-
 app.get('/api/v1/projects', (request, response) => {
-  const projects = app.locals.projects
-
-  response.status(200).json(projects)
+  database('projects').select()
+    .then(projects => {
+      response.status(200).json(projects)
+    })
+    .catch(error => {
+      response.status(500).json({ error })
+    })
 })
 
 app.post('/api/v1/projects', (request, response) => {
-  const newProject = { name: request.body.project_name, id: Date.now() }
-  app.locals.projects.push(newProject)
+  const project = request.body
 
-  response.status(200).json(newProject)
+  if(!project['name']) {
+    return response.status(422).send(`Expected format: { name: <String> }. You're missing a name parameter.`)
+  }
+
+  database('projects').insert(project, 'id')
+    .then(projectID => {
+      response.status(200).json({ ...project, id: projectID[0] })
+    })
+    .catch(error => {
+      response.status(500).json({ error })
+    })
 })
 
 app.get('/api/v1/projects/:id/palettes', (request, response) => {
-  const palettes = app.locals.palettes
-  const id = parseInt(request.params.id)
-
-  const currentPalettes = palettes.filter(palette => {
-    return palette.project_id === id
-  })
-  
-  response.status(200).json(currentPalettes)
+  database('palettes').where('project_id', request.params.id).select()
+    .then(palettes => {
+      response.status(200).json(palettes)
+    })
+    .catch(error => {
+      response.status(500).json({ error })
+    })
 })
 
 app.get('/api/v1/projects/:id/palettes/:palette_id', (request, response) => {
-  const palettes = app.locals.palettes
-  const palette_id = parseInt(request.params.palette_id)
-
-  const currentPalette = palettes.find(palette => {
-    return palette.id === palette_id
-  })
-
-  response.status(200).json(currentPalette)
+  database('palettes').where('id', request.params.palette_id).select()
+    .then(palette => {
+      response.status(200).json(palette[0])
+    })
+    .catch(error => {
+      response.status(500).json({ error })
+    })
 })
 
 app.post('/api/v1/projects/:id', (request, response) => {
-  const newPalette = {...request.body.palette, id: Date.now() }
-  app.locals.palettes.push(newPalette)
+  const palette = request.body
 
-  response.status(200).json(newPalette)
+  for (let requiredParam of ['name', 'color1', 'color2', 'color3', 'color4', 'color5', 'project_id']) {
+    if (!palette[requiredParam]) {
+      return response.status(422).send(`Expected format: { name: <String>, color1: <String>, color2: <String>, color3: <String>, color4: <String>, color5: <String>, project_id: <Integer> }. You're missing a ${requiredParam} parameter.`)
+    }
+  }
+
+  database('palettes').insert(palette, 'id')
+    .then(paletteID => {
+      response.status(200).json({ ...palette, id: paletteID[0] })
+    })
+    .catch(error => {
+      response.status(500).json({ error })
+    })
 })
 
 app.delete('/api/v1/projects/:id/palettes/:palette_id', (request, response) => {
-  const id = request.params.palette_id
-  const newPalettes = app.locals.filter(palette => {
-    return palette.id !== id
-  })
+  database('palettes').where('id', request.params.palette_id).del()
+    .then(paletteID => {
+      response.status(200).json(`Successfully deleted Palette ${paletteID[0]}`)
+    })
+    .catch(error => {
+      response.status(500).json({ error })
+    })
+})
 
-  app.locals.palettes = newPalettes
-  response.status(200).json('Success')
+app.delete('/api/v1/projects/:id', (request, response) => {
+  database('palettes').where('project_id', request.params.id).del()
+    .then(() => {
+      database('projects').where('id', request.params.id).del()
+        .then(project => {
+          response.status(200).json(`Successfully deleted Project ${project[0]}`)
+        })
+        .catch(error => {
+          response.status(500).json({ error })
+        })
+    })
+    .catch(error => {
+      response.status(500).json({ error })
+    })
 })
 
 app.listen(app.get('port'), () => {
