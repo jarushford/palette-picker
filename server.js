@@ -100,6 +100,10 @@ app.delete('/api/v1/projects/:id', (request, response) => {
     })
 })
 
+app.use((request, response) => {
+  response.status(404).send('Page Not Found')
+})
+
 app.listen(app.get('port'), () => {
   console.log(`${app.locals.title} is running on ${app.get('port')}.`)
 })
