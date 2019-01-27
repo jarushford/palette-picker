@@ -220,6 +220,7 @@ async function checkProjectName(name) {
 }
 
 async function addPalette(e) {
+  clearError('palette')
   const nameInput = document.querySelector('.palette-name')
   const selectInput = document.querySelector('.select-project')
   if (!nameInput.value || !selectInput.value) {
