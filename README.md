@@ -4,7 +4,7 @@
 
 The goal of this app was to build a color palette selection tool similar to a site like [Coolors](https://coolors.co/), with the primary focus being the back end. The front end is built in vanilla JavaScript and the back end is built with an Express server and PostreSQL database which communicate via Knex. The site is deployed on Heroku.
 
-#### View [live site] (https://jr-palette-picker.herokuapp.com/)
+#### View [live site](https://jr-palette-picker.herokuapp.com/)
 
 ### Installation & Set Up
 
