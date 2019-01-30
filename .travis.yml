@@ -1,3 +1,9 @@
 language: node_js
 node_js:
-  - "node"
+- node
+deploy:
+  provider: heroku
+  api_key:
+    secure: Hv/ubigR8ERH0W9yM8cflZzWEeaGdm0sA6dFyEY5Gbacizs2aHtLKZv1d3KRIrx9IohFVW8edQhWejpD6zsJ7TOC6f+FFV9SZJ+5EWagJPem9Nc00IdUsZs2ICU1yl6OllCGE4nPxyt3UYDOGXOPOwpSn3g8vTlIdPdK5Vh4Csot9O1T/s0XoKr1goI6nS0QvMJMrKEghKVJ0kZ/SUGPFYh2e/c3E1NrvhQPfacMennCSVlaCYj/dS3HzJfKwBUvwYhxsuQd8TNHlSkOd0ZUjPB3e4p08lB36ceA0AXNluF/UT2R71FaE/kqQvuBEKhX+Bvu0f2eB1dHMD6Btt+O8wnuA2Bq4K4MVcEs73FgZXtKKb6Y/XLQxOqkDrxfkYc4sS4VRz7VbV1KJ9BZUdV6Z9kF05n/65Vh5ZZrDW65VJNGgdUBIwGrOa2ojmlarXTNfjyMDNoIYIMJCyOTPys4vtpkdH61BDTajbhKH2agnYL7vlPaqqCTn8K6W5SWABd2PEw5PHPfBOgB+k8Stkpk9dOlY98PVSO7oXM9u5qra2NyZmnltIo/PUlYEG0CbDixzUTn6lrYUMKCe5/G4iEjge/KFVGFCcdJnvLjctvjiqlCdepLFyiFPCJHTe84wiK7Y+qOOjaYzgKGKfjHhLCLgI6JnHPS2c4VFtGsLva6o1s=
+  app: jr-palette-picker
+  skip_cleanup: true
